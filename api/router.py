@@ -14,6 +14,8 @@ from schemas.chat import (
     SessionInfoResponse,
     ImportQuestionsRequest,
     ImportQuestionsResponse,
+    SearchQuestionsRequest,
+    SearchQuestionsResponse,
 )
 from services.interview_service import interview_service
 from services.question_bank import QuestionBank
@@ -237,21 +239,16 @@ def get_question_count() -> dict:
     return {"count": count}
 
 
-@router.post("/questions/search")
-def search_questions(
-    query: str,
-    job_requirements: str = None,
-    question_types: list = None,
-    k: int = 10,
-) -> dict:
+@router.post("/questions/search", response_model=SearchQuestionsResponse)
+def search_questions(req: SearchQuestionsRequest) -> SearchQuestionsResponse:
     """搜索问题"""
     results = question_bank.search_questions(
-        query=query,
-        job_requirements=job_requirements,
-        question_types=question_types,
-        k=k,
+        query=req.query,
+        job_requirements=req.job_requirements,
+        question_types=req.question_types,
+        k=req.k,
     )
-    return {
-        "count": len(results),
-        "questions": [{"content": doc.page_content, "metadata": doc.metadata} for doc in results],
-    }
+    return SearchQuestionsResponse(
+        count=len(results),
+        questions=[{"content": doc.page_content, "metadata": doc.metadata} for doc in results],
+    )

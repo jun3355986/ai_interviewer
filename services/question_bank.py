@@ -83,9 +83,8 @@ class QuestionBank:
         # 拆分文档
         texts = self.text_splitter.split_documents(documents)
         
-        # 添加到向量数据库
+        # 添加到向量数据库（新版本的 Chroma 会自动持久化，无需手动调用 persist()）
         self.vectorstore.add_documents(texts)
-        self.vectorstore.persist()
         
         return len(texts)
     

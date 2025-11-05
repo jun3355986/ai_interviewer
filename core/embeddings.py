@@ -87,7 +87,17 @@ class DashScopeEmbeddings(Embeddings):
         Returns:
             embeddings列表
         """
-        return self._embed(texts)
+        # DashScope API 限制每批最多 10 个文本
+        batch_size = 10
+        all_embeddings = []
+        
+        # 分批处理
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i + batch_size]
+            batch_embeddings = self._embed(batch)
+            all_embeddings.extend(batch_embeddings)
+        
+        return all_embeddings
     
     def embed_query(self, text: str) -> List[float]:
         """

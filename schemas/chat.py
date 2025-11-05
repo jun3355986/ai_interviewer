@@ -86,3 +86,15 @@ class ImportQuestionsResponse(BaseModel):
     message: str = Field(..., description="提示信息")
 
 
+class SearchQuestionsRequest(BaseModel):
+    query: str = Field(..., description="搜索查询文本")
+    job_requirements: Optional[str] = Field(default=None, description="职位要求")
+    question_types: Optional[List[str]] = Field(default=None, description="问题类型列表")
+    k: int = Field(default=10, description="返回的问题数量")
+
+
+class SearchQuestionsResponse(BaseModel):
+    count: int = Field(..., description="匹配的问题数量")
+    questions: List[Dict] = Field(..., description="问题列表")
+
+

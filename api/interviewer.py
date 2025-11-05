@@ -226,6 +226,7 @@ class Interviewer:
                 query_parts.append(f"候选人平均分: {avg_score:.1f}")
         
         query = "\n".join(query_parts)
+        print(f"检索查询内容: {query}")
         
         # 检索问题
         total_count = sum(counts.values())
